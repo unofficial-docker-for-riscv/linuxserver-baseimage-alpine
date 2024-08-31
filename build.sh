@@ -15,9 +15,12 @@ echo "Building repos: ${REPOS[*]}"
 # Build
 echo "Building images..."
 for arch in ${ARCHS[@]}; do
+    echo "=== Building arch: ${arch}"
     TAGS=()
     for repo in ${REPOS[@]}; do
         TAGS+=("-t ${repo}:${arch}-${VERSION}")
+        TAGS+=("-t ${repo}:${arch}-${VERSION%.*}")
+        TAGS+=("-t ${repo}:${arch}-latest")
     done
     docker buildx build \
         --platform linux/${arch} \
@@ -34,6 +37,8 @@ echo "Combining with official Alpine image..."
 TAGS=()
 for repo in ${REPOS[@]}; do
     TAGS+=("-t ${repo}:${VERSION}")
+    TAGS+=("-t ${repo}:${VERSION%.*}")
+    TAGS+=("-t ${repo}:latest")
 done
 docker buildx imagetools create ${TAGS[*]} \
     ${IMAGES[*]} \
