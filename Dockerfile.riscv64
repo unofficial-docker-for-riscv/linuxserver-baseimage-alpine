@@ -1,11 +1,10 @@
 # syntax=docker/dockerfile:1
 
-FROM alpine:3.20 AS rootfs-stage
+FROM alpine:3 AS rootfs-stage
 
 # environment
-ARG VERSION
 ENV ROOTFS=/root-out
-ENV REL=v${VERSION}
+ENV REL=edge
 ENV ARCH=riscv64
 ENV MIRROR=http://dl-cdn.alpinelinux.org/alpine
 ENV PACKAGES=alpine-baselayout,\
@@ -74,7 +73,6 @@ ENV PS1="$(whoami)@$(hostname):$(pwd)\\$ " \
 RUN \
   echo "**** install runtime packages ****" && \
   apk add --no-cache \
-    alpine-release \
     bash \
     ca-certificates \
     catatonit \
