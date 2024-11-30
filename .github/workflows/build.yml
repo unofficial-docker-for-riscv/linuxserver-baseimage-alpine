@@ -39,7 +39,7 @@ jobs:
 
       - name: Build and push
         run: |
-          REPOS=" \
-            ${{ secrets.DOCKERHUB_USER }}/baseimage-alpine \
+          REPOS="\
+            ${{ secrets.DOCKERHUB_USER }}/riscv-linuxserver-baseimage-alpine \
             ghcr.io/${{ github.repository }} \
           " ./build.sh

@@ -3,43 +3,22 @@
 set -e
 
 VERSION=${VERSION:-3.20}
-ARCHS=(${ARCHS:-riscv64})
-REPOS=(${REPOS:-ngc7331/baseimage-alpine})
-IMAGES=()
-OFFICIAL_REPO=lscr.io/linuxserver/baseimage-alpine
+REPOS=(${REPOS:-ngc7331/riscv-linuxserver-baseimage-alpine})
 
-echo "Building version: ${VERSION}"
-echo "Building archs: ${ARCHS[*]}"
-echo "Building repos: ${REPOS[*]}"
+echo "Build version: ${VERSION}"
+echo "Build repos: ${REPOS[*]}"
 
 # Build
-echo "Building images..."
-for arch in ${ARCHS[@]}; do
-    echo "=== Building arch: ${arch}"
-    TAGS=()
-    for repo in ${REPOS[@]}; do
-        TAGS+=("-t ${repo}:${arch}-${VERSION}")
-        TAGS+=("-t ${repo}:${arch}-${VERSION%.*}")
-        TAGS+=("-t ${repo}:${arch}-latest")
-    done
-    docker buildx build \
-        --platform linux/${arch} \
-        --build-arg VERSION=${VERSION} \
-        -f Dockerfile.${arch} \
-        ${TAGS[*]} \
-        --push \
-        .
-    IMAGES+=(${repo}:${arch}-${VERSION})
-done
-
-# Combine with official Alpine image & push
-echo "Combining with official Alpine image..."
+echo "Building image..."
 TAGS=()
 for repo in ${REPOS[@]}; do
     TAGS+=("-t ${repo}:${VERSION}")
     TAGS+=("-t ${repo}:${VERSION%.*}")
     TAGS+=("-t ${repo}:latest")
 done
-docker buildx imagetools create ${TAGS[*]} \
-    ${IMAGES[*]} \
-    ${OFFICIAL_REPO}:${VERSION}
+docker buildx build \
+    --platform linux/riscv64 \
+    --build-arg VERSION=${VERSION} \
+    ${TAGS[*]} \
+    --push \
+    .
