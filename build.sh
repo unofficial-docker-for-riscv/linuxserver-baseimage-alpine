@@ -2,7 +2,7 @@
 
 set -e
 
-VERSION=${VERSION:-3.20}
+VERSION=$(cat Dockerfile | grep "ENV REL=" | cut -d"v" -f2)
 REPOS=(${REPOS:-ngc7331/riscv-linuxserver-baseimage-alpine})
 
 echo "Build version: ${VERSION}"

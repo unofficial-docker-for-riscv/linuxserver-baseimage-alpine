@@ -20,6 +20,9 @@ jobs:
             echo "No changes in upstream"
           else
             echo "Changes in upstream"
+            echo "Applying patch"
+            ./apply_patch.sh
+            echo "Committing changes"
             git config user.email "77287747+ngc7331-bot@users.noreply.github.com"
             git config user.name "ngc7331-bot"
             git commit -am "[BOT] Update submodule"

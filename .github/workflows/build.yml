@@ -15,9 +15,6 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Get Version
-        run : echo VERSION=$(sed -n 's/VERSION=${VERSION:-\([0-9.]*\)}/\1/p' build.sh) >> $GITHUB_ENV
-
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
